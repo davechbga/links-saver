@@ -1,0 +1,25 @@
+---
+import { metaData } from "../data/siteData";
+const { title = metaData.title, description = metaData.description } =
+  Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="grid gap-6">
+    <nav class="container flex justify-between items-center py-4">
+      <a class="text-blue-500 underline" href="/">Home</a>
+      <a class="text-blue-500 underline" href="add">Add</a>
+    </nav>
+    <main class="container grid gap-6">
+      <slot />
+    </main>
+  </body>
+</html>
