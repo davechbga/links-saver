@@ -1,9 +1,22 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { Links } from "@/types/Links";
 
+const req = await fetch(`${Astro.url.origin}/api/getLinks.json`);
 
+const { data } = await req.json();
 ---
 
 <BaseLayout>
-	Home
+  <ul>
+    {
+      data.map((i: Links) => (
+        <li class="grid gap-1">
+          <p>{i.title}</p>
+          <a class="underline text-blue-500" 
+		  href={`/link/${i.id}`}>See Link</a>
+        </li>
+      ))
+    }
+  </ul>
 </BaseLayout>

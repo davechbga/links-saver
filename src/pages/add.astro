@@ -59,13 +59,20 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     const values = Object.fromEntries(formData);
 
     try {
-      const response = await fetch("/api/addLink.json", {
+      const res = await fetch("/api/addLink.json", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
       });
+      const { success, message } = await res.json();
+      if (success) {
+        // TODO: toast success
+        console.log("Link added successfully");
+      } else {
+        throw new Error(message);
+      }
     } catch (e) {
       console.error(e);
     }

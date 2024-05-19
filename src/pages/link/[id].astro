@@ -1,0 +1,23 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { Links } from "@/types/Links";
+
+const { id } = Astro.params;
+
+const req = await fetch(`${Astro.url.origin}/api/getLinks.json?id=${id}`);
+
+if (!req.ok) {
+  return Astro.redirect("/");
+}
+
+const { data } = await req.json();
+if (!data) {
+  return Astro.redirect("/");
+}
+---
+
+<BaseLayout>
+  <ul>
+    <li>{data.title}</li>
+  </ul>
+</BaseLayout>
