@@ -4,9 +4,6 @@ export const GET: APIRoute = async ({ params, request }) => {
   const url = new URL(request.url);
   const id = url.searchParams.get("id");
 
-  // if we have id, then gran a single resource
-  // otherwise grab em all
-
   if (id) {
     try {
       const res = await fetch(`http://localhost:3000/links/${id}`, {

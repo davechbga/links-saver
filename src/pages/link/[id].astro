@@ -6,6 +6,10 @@ const { id } = Astro.params;
 
 const req = await fetch(`${Astro.url.origin}/api/getLinks.json?id=${id}`);
 
+if (!id) {
+  return Astro.redirect("/");
+}
+
 if (!req.ok) {
   return Astro.redirect("/");
 }

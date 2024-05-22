@@ -66,15 +66,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         },
         body: JSON.stringify(values),
       });
-      const { success, message } = await res.json();
-      if (success) {
-        // TODO: toast success
-        console.log("Link added successfully");
-      } else {
-        throw new Error(message);
-      }
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
     }
   });
 </script>
