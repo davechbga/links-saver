@@ -1,7 +1,8 @@
 import type { APIRoute } from "astro";
 
-export const GET: APIRoute = async ({ params }) => {
-  const id = params.id;
+export const GET: APIRoute = async ({ request }) => {
+  const url = new URL(request.url);
+  const id = url.searchParams.get("id");
 
   try {
     const res = await fetch(`http://localhost:3000/links/${id || ""}`, {

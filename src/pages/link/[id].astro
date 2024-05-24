@@ -21,6 +21,20 @@ if (!data) {
 ---
 
 <BaseLayout>
+  <ul>
+    <li>Nombre: {data.title}</li>
+    <li>Descripción: {data.description}</li>
+    <li>
+      <a
+        href={data.url}
+        class="text-blue-500 hover:underline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View Link
+      </a>
+    </li>
+  </ul>
   <div class="flex gap-2">
     <button
       type="submit"
@@ -33,30 +47,23 @@ if (!data) {
       class="bg-teal-600 text-white py-2 px-6 rounded-lg">Edit Link</a
     >
   </div>
-  <ul>
-    <li>{data.title}</li>
-    <li>{data.description}</li>
-    <li>{data.url}</li>
-    <li><a href={data.url}>View Link</a></li>
-  </ul>
-
-  <script
-    define:vars={{
-      data: data,
-    }}
-  >
-    const deleteButton = document.querySelector("#delete");
-    deleteButton.addEventListener("click", async (e) => {
-      const response = await fetch(`/api/${data.id}.json`, {
-        method: "DELETE",
-      });
-      const { success, message } = await response.json();
-      if (success) {
-        alert("Link deleted successfully");
-        window.location.href = "/";
-      } else {
-        alert(message);
-      }
-    });
-  </script>
 </BaseLayout>
+<script
+  define:vars={{
+    data: data,
+  }}
+>
+  const deleteButton = document.querySelector("#delete");
+  deleteButton.addEventListener("click", async (e) => {
+    const response = await fetch(`/api/${data.id}.json`, {
+      method: "DELETE",
+    });
+    const { success, message } = await response.json();
+    if (success) {
+      alert("Link deleted successfully");
+      window.location.href = "/";
+    } else {
+      alert(message);
+    }
+  });
+</script>

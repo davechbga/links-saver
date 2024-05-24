@@ -1,28 +1,12 @@
 {
   "links": [
     {
-      "title": "zxczxc",
-      "description": "zxczxc",
-      "url": "zxcaasd.comAAAAAAAAAAAAAAA22222",
-      "rating": "1",
-      "isRead": "on",
-      "id": 3
-    },
-    {
-      "title": "Test put",
-      "description": "askdjasd",
-      "url": "dasddsad.com",
+      "title": "Facebook 2 UPDATED",
+      "description": "Facebook",
+      "url": "https://github.com/",
       "rating": "2",
-      "isRead": "on",
-      "id": 4
-    },
-    {
-      "title": "test 3",
-      "description": "zxc",
-      "url": "google.com",
-      "rating": "4",
-      "isRead": "on",
-      "id": 5
+      "isRead": false,
+      "id": 1
     }
   ]
 }
