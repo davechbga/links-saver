@@ -10,11 +10,13 @@ const { data } = await req.json();
 <BaseLayout>
   <ul>
     {
+      data &&
       data.map((i: Links) => (
         <li class="grid gap-1">
           <p>{i.title}</p>
-          <a class="underline text-blue-500 text-xs" 
-		  href={`/link/${i.id}`}>See Link</a>
+          <a class="underline text-blue-500 text-xs" href={`/link/${i.id}`}>
+            See Link
+          </a>
         </li>
       ))
     }

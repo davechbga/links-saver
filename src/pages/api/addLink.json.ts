@@ -1,40 +1,36 @@
 import type { APIRoute } from "astro";
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, redirect }) => {
   const data = await request.json();
+  data.isRead = data.isRead || false;
+  data.rating = data.rating === "" ? null : data.rating;
 
-  if (!data.isRead) {
-    data.isRead = false;
-  }
+  const res = await fetch("http://localhost:3000/links", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
 
-  if (data.rating === "") {
-    data.rating = null;
-  }
+  const dbRes = await res.json();
 
-  try {
-    const res = await fetch("http://localhost:3000/links", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const dbRes = await res.json();
-  } catch (e) {
-    console.error(e);
+  if (dbRes.id) {
     return new Response(
       JSON.stringify({
-        message: "Error adding link",
-      }),
-      {
-        status: 500,
-      }
+        message: "success",
+        success: true,
+      })
     );
   }
 
   return new Response(
     JSON.stringify({
-      message: "Link added",
-    })
+      message: "error",
+      success: false,
+    }),
+    {
+      status: 404,
+    }
   );
 };

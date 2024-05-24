@@ -4,24 +4,59 @@ import type { Links } from "@/types/Links";
 
 const { id } = Astro.params;
 
-const req = await fetch(`${Astro.url.origin}/api/getLinks.json?id=${id}`);
-
 if (!id) {
   return Astro.redirect("/");
 }
+
+const req = await fetch(`${Astro.url.origin}/api/getLinks.json?id=${id}`);
 
 if (!req.ok) {
   return Astro.redirect("/");
 }
 
-const { data } = await req.json();
+const { data }: { data: Links } = await req.json();
 if (!data) {
   return Astro.redirect("/");
 }
 ---
 
 <BaseLayout>
+  <div class="flex gap-2">
+    <button
+      type="submit"
+      id="delete"
+      class="bg-red-500 text-white py-2 px-6 rounded-lg">Delete Link</button
+    >
+
+    <a
+      href={`/edit/${data.id}`}
+      class="bg-teal-600 text-white py-2 px-6 rounded-lg">Edit Link</a
+    >
+  </div>
   <ul>
     <li>{data.title}</li>
+    <li>{data.description}</li>
+    <li>{data.url}</li>
+    <li><a href={data.url}>View Link</a></li>
   </ul>
+
+  <script
+    define:vars={{
+      data: data,
+    }}
+  >
+    const deleteButton = document.querySelector("#delete");
+    deleteButton.addEventListener("click", async (e) => {
+      const response = await fetch(`/api/${data.id}.json`, {
+        method: "DELETE",
+      });
+      const { success, message } = await response.json();
+      if (success) {
+        alert("Link deleted successfully");
+        window.location.href = "/";
+      } else {
+        alert(message);
+      }
+    });
+  </script>
 </BaseLayout>

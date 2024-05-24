@@ -1,11 +1,30 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { Links } from "@/types/Links";
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect("/");
+}
+
+const req = await fetch(`${Astro.url.origin}/api/getLinks.json?id=${id}`);
+
+if (!req.ok) {
+  return Astro.redirect("/");
+}
+
+const { data }: { data: Links } = await req.json();
+if (!data) {
+  return Astro.redirect("/");
+}
 ---
 
 <BaseLayout>
   <form id="add-form" class="grid gap-4">
     <div class="grid">
       <label for="title">Link Title</label><input
+        value={data.title}
         required
         type="text"
         name="title"
@@ -15,10 +34,12 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     <div class="grid">
       <label for="description">Description for Link (160ch max)</label>
       <textarea required name="description" maxlength="160" id="description"
-      ></textarea>
+        >{data.description}</textarea
+      >
     </div>
     <div class="grid">
       <label for="url">Link URL</label><input
+        value={data.url}
         required
         type="text"
         name="url"
@@ -28,6 +49,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     <flex class="gap-6 flex flex-wrap">
       <div class="grid max-w-fit">
         <label for="rating">Rating (1-5)</label><input
+          value={data.rating}
           required
           max="5"
           min="1"
@@ -38,6 +60,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
       </div>
       <div class="grid max-w-fit">
         <label for="isRead">Is Read</label><input
+          checked={data.isRead}
           type="checkbox"
           name="isRead"
           id="isRead"
@@ -45,14 +68,17 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
       </div>
     </flex>
 
-    <button class="bg-blue-500 text-blue-50 p-6 py-2 max-w-fit">Add Link</button
+    <button class="bg-blue-500 text-blue-50 p-6 py-2 max-w-fit">Update Link</button
     >
   </form>
 </BaseLayout>
 
-<script>
-  const addForm = document.querySelector("#add-form") as HTMLFormElement;
-
+<script
+  define:vars={{
+    id,
+  }}
+>
+  const addForm = document.querySelector("#add-form");
   addForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(addForm);
@@ -60,8 +86,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     const values = Object.fromEntries(formData);
 
     try {
-      const res = await fetch("/api/addLink.json", {
-        method: "POST",
+      const res = await fetch(`/api/${id}.json`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -70,8 +96,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
       const { success, message } = await res.json();
       if (success) {
         addForm.reset();
-        alert("Link added successfully!");
-        window.location.href = "/";
+        alert("Link updated successfully!");
+        window.location.href = `/link/${id}`;
       } else {
         throw new Error(message);
       }
